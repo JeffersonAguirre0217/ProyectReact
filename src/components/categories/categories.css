@@ -1,0 +1,19 @@
+#cardCategory{
+    height: 90px;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card-btn {
+  color: black;
+}
+
+.card-btn:hover {
+  color: rgb(32, 88, 178);
+}
+
+@media screen and (max-width: 600px) {
+    #cardProduct {
+      height: 300px;
+    }
+  }

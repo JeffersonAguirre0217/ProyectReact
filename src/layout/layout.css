@@ -1,0 +1,28 @@
+.App-header {
+    background-color: #282c34;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  ul{
+    list-style: none;
+    padding: 5%;
+  }
+
+  label{
+    font-size: 17px !important;
+  }
+
+  .App-link {
+    list-style-type: none;
+    text-decoration: none !important;
+    font-size: 17px !important;
+    color: white ;
+  }
+
+  .App-link:hover{
+    background-color: aliceblue;
+    color:  #000;
+  }
