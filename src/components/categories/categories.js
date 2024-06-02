@@ -12,7 +12,7 @@ function Categories(){
 
     const categories = useSelector(x => x.categories.list);
     const dispatch = useDispatch(); 
-    console.log('catego lis', categories);
+    
     useEffect(()=> {
         dispatch(categoryActions.getAll());
     },[]);

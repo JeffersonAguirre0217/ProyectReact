@@ -18,9 +18,11 @@ function createInitialState() {
         item: null,
         setUpdate
     }
-    function setUpdate(state, action){
-        state.item = {value : action.payload}
-    }
+    
+}
+
+function setUpdate(state, action){
+    state.item = {value : action.payload}
 }
 
 function createExtraActions() {
@@ -63,14 +65,14 @@ function createExtraActions() {
 
                 // update stored user if the logged in user updated their own record
                 const product = getState().products.value;
-                console.log('q ejecuta', product);
+                
                 //if (id === category?.id.toString()) {
                     // update local storage
                     const products = { ...product, ...data };
                     localStorage.setItem('products', JSON.stringify(products));
 
                     // update auth user in redux state
-                    dispatch(initialState.setUpdate(product));
+                    dispatch(setUpdate(product));
                 //}
             }
         );

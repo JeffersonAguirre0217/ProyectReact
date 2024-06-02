@@ -39,7 +39,6 @@ function fakeBackendProduct() {
                 }
 
                 product.id = products.length ? Math.max(...products.map(x => x.id)) + 1 : 1;
-                console.log('add id', product );
                 products.push(product);
                 localStorage.setItem(productsKey, JSON.stringify(products));
                 return ok();

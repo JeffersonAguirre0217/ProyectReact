@@ -13,6 +13,7 @@ import Dashboard from '../components/dashboard/dashboard.js';
 import { AddEdit } from '../components/categories/addEditTemplate.js';
 import { AddEditProduct } from '../components/products/addEditTemplateProduct.js';
 import { Nav } from './nav.jsx';
+import { ProductDetail } from '../components/products/productDetail .js';
 
 function Layout() {
     return (
@@ -51,6 +52,7 @@ function Layout() {
                             <Route path="/products" element={<Products />}/>
                             <Route path="/products/add" element={<AddEditProduct />} />
                             <Route path="/products/edit/:id" element={<AddEditProduct />} />
+                            <Route path="/products/detail/:id" element={<ProductDetail />} />
 
                             <Route path='/categories' element={<Categories />} />
                             <Route path="/categories/add" element={<AddEdit />} />

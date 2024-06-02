@@ -13,7 +13,7 @@ function Products(){
 
     const products = useSelector(x => x.products.list);
     const dispatch = useDispatch(); 
-    console.log('pro lis', products);
+    
     useEffect(()=> {
         dispatch(productActions.getAll());
     },[]); 
@@ -40,7 +40,6 @@ function Products(){
                             <div className='row'>
                                 <div className='col-lg-2 col-sm-12 text-center'>
                                     {product.file ? <img className='img-product mt-2' src={product.file} alt={product.name}/> : <img className='img-product mt-2' src="https://cdn.icon-icons.com/icons2/943/PNG/512/shoppaymentorderbuy-10_icon-icons.com_73874.png" alt="..."/>}
-                                    {console.log('pr',product.file)}
                                 </div>
                                 <div className='col-lg-7 col-sm-12'>
                                     <div className="card-body">
@@ -66,7 +65,7 @@ function Products(){
                                 </div>
                                 <div className='col-lg-3 col-sm-12'>
                                     <div className="card-body">
-                                        <Link to={`edit/${product.id}`} className="btn btn-sm btn-secondary me-1"><FontAwesomeIcon icon={faEye} className='m-0'/></Link>
+                                        <Link to={`detail/${product.id}`} className="btn btn-sm btn-secondary me-1"><FontAwesomeIcon icon={faEye} className='m-0'/></Link>
                                         <Link to={`edit/${product.id}`} className="btn btn-sm btn-primary me-1"><FontAwesomeIcon icon={faEdit} className='m-0'/></Link>
                                         <button onClick={() => dispatch(productActions.delete(product.id))} className="btn btn-sm btn-danger">
                                             {product.isDeleting 

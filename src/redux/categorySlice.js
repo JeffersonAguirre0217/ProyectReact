@@ -59,7 +59,7 @@ function createExtraActions() {
 
                 // update stored user if the logged in user updated their own record
                 const category = getState().categories.value;
-                console.log('q ejecuta', category);
+                
                 //if (id === category?.id.toString()) {
                     // update local storage
                     const categories = { ...category, ...data };

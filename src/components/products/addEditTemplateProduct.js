@@ -23,13 +23,13 @@ function AddEditProduct() {
 
     function healdfile(e){
         setFile(e.target.files[0]);
-        console.log('fil', e.target.files);
+        //console.log('fil', e.target.files);
 
     }
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
-        file: Yup.object()
+        file: Yup.string()
             .required('Product imge is required'),
         name: Yup.string()
             .required('Product name is required'),
@@ -89,26 +89,26 @@ function AddEditProduct() {
             {!(product?.loading || product?.error) &&
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row"> 
-                    <div className='mb-3 col'>
+                    <div className='mb-3 col-12'>
                     <input type="file" {...register('file')} onChange={(healdfile)}></input>
                     { file ? <img alt="Preview" height="60" src={URL.createObjectURL(file)} /> : null }
                     </div>
-                    <div className="mb-3 col">
+                    <div className="mb-3 col-12">
                             <label className="form-label">Product</label>
                             <input name="lastName" type="text" {...register('name')} className={`form-control ${errors.cant ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback">{errors.name?.message}</div>
                         </div>
-                        <div className="mb-3 col">
+                        <div className="mb-3 col-4">
                             <label className="form-label">Cant</label>
                             <input name="lastName" type="text" {...register('cant')} className={`form-control ${errors.cant ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback">{errors.cant?.message}</div>
                         </div>
-                        <div className="mb-3 col">
+                        <div className="mb-3 col-4">
                             <label className="form-label">Price</label>
                             <input name="lastName" type="text" {...register('price')} className={`form-control ${errors.price ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback">{errors.price?.message}</div>
                         </div>
-                        <div className="mb-3 col">
+                        <div className="mb-3 col-4">
                             <label className="form-label">Category</label><br></br>
                             <select {...register("category")}>
                             {categories?.value?.map(category =>
@@ -116,7 +116,7 @@ function AddEditProduct() {
                                 )}
                             </select>
                         </div>
-                        <div className="mb-3 col">
+                        <div className="mb-3 col-12">
                             <label className="form-label">description</label>
                             <input name="lastName" type="text" {...register('categoryDescription')} className={`form-control ${errors.price ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback">{errors.categoryDescription?.message}</div>
