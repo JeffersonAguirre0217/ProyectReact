@@ -12,7 +12,7 @@ function ProductDetail() {
     const [title, setTitle] = useState();
     const dispatch = useDispatch();
     const product = useSelector(x => x.products?.item);
-    console.log('po', product);
+    
 
     useEffect(() => {
         setTitle('Detail of ');

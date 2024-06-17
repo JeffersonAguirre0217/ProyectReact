@@ -57,24 +57,26 @@ function createExtraActions() {
             async function ({ id, data }, { getState, dispatch }) {
                 await fetchWrapper.put(`${baseUrl}/${id}`, data);
 
-                // update stored user if the logged in user updated their own record
-                const category = getState().categories.value;
+                // update stored category
+                //const category = getState().categories.value.find(id);
                 
                 //if (id === category?.id.toString()) {
-                    // update local storage
-                    const categories = { ...category, ...data };
-                    localStorage.setItem('categories', JSON.stringify(categories));
-
-                    // update auth user in redux state
-                    dispatch(setUpdate(categories));
+                    //const categories = { ...category, ...data };
+                    //localStorage.setItem('react-and-redux-categories', JSON.stringify(categories));
+                    
+                    //dispatch(setUpdate(categories));
+                    
                 //}
             }
         );
     }
 
-    function setUpdate(state, action){
-        state.item = {value: action.value};
-    }
+    //function setUpdate(state, action){
+        //state.item = [
+            //{value: action.payload}
+            //description: action.payload.description
+        //]
+    //}
 
     // prefixed with underscore because delete is a reserved word in javascript
     function _delete() {

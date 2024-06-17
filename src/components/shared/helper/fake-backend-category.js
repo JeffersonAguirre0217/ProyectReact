@@ -37,7 +37,7 @@ function fakeBackendCategory() {
                 const category = body();
 
                 if (categories.find(x => x.name === category.name)) {
-                    return error('Category "' + category.name + '" is already taken')
+                    return error('Category "' + category.name + '" is already category')
                 }
 
                 category.id = categories.length ? Math.max(...categories.map(x => x.id)) + 1 : 1;
@@ -59,22 +59,16 @@ function fakeBackendCategory() {
             }
 
             function updateCategory() {
+                const categoriesObject = [];
                 if (!isAuthenticated()) return unauthorized();
 
                 let params = body();
                 let category = categories.find(x => x.id === idFromUrl());
-
-                // only update password if entered
-                //if (!params.named) {
-                    delete params.name;
-               // }
-
-                // if username changed check if taken
+                
                 //if (params.name !== category.name && categories.find(x => x.name === params.name)) {
-                 //   return error('Username "' + params.name + '" is already taken')
+                 //   return error('name "' + params.name + '" is already taken')
                 //}
 
-                // update and save user
                 Object.assign(category, params);
                 localStorage.setItem(categoriesKey, JSON.stringify(categories));
 

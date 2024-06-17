@@ -46,7 +46,7 @@ function AddEdit() {
     async function onSubmit(data) {
         dispatch(alertActions.clear());
         try {
-            // create or update user based on id param
+            
             let message;
             if (id) {
                 await dispatch(categoryActions.update({ id, data })).unwrap();
@@ -56,11 +56,11 @@ function AddEdit() {
                 message = 'Category added';
             }
 
-            // redirect to user list with success message
             history.navigate('/categories');
             dispatch(alertActions.success({ message, showAfterRedirect: true }));
         } catch (error) {
             dispatch(alertActions.error(error));
+            
         }
     }
 

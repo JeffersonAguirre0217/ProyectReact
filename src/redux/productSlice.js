@@ -16,13 +16,8 @@ function createInitialState() {
     return {
         list: null,
         item: null,
-        setUpdate
     }
     
-}
-
-function setUpdate(state, action){
-    state.item = {value : action.payload}
 }
 
 function createExtraActions() {
@@ -62,18 +57,6 @@ function createExtraActions() {
             `${name}/update`,
             async function ({ id, data }, { getState, dispatch }) {
                 await fetchWrapper.put(`${baseUrl}/${id}`, data);
-
-                // update stored user if the logged in user updated their own record
-                const product = getState().products.value;
-                
-                //if (id === category?.id.toString()) {
-                    // update local storage
-                    const products = { ...product, ...data };
-                    localStorage.setItem('products', JSON.stringify(products));
-
-                    // update auth user in redux state
-                    dispatch(setUpdate(product));
-                //}
             }
         );
     }

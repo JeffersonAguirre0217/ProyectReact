@@ -62,10 +62,6 @@ function fakeBackendProduct() {
                 let params = body();
                 let product = products.find(x => x.id === idFromUrl());
 
-                // only update password if entered
-                //if (!params.named) {
-                    delete params.name;
-               // }
 
                 // if username changed check if taken
                 //if (params.name !== category.name && categories.find(x => x.name === params.name)) {
