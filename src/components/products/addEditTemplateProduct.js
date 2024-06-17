@@ -20,16 +20,17 @@ function AddEditProduct() {
     const dispatch = useDispatch();
     const product = useSelector(x => x.products?.item);
     const categories = useSelector(x => x.categories?.list);
+    let urlImg = '';
+    
 
     function healdfile(e){
-        setFile(e.target.files[0]);
-        //console.log('fil', e.target.files);
-
+        setFile(e.target.files[0]);    
+        urlImg = URL.createObjectURL(e.target.files[0])
     }
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
-        file: Yup.string()
+        urlImg: Yup.string()
             .required('Product imge is required'),
         name: Yup.string()
             .required('Product name is required'),
@@ -49,13 +50,13 @@ function AddEditProduct() {
     const { errors, isSubmitting } = formState;
 
     useEffect(() => {
+        //initialice categories
+        dispatch(categoryActions.getAll());
+
         if (id) {
-            setTitle('Edit product');
-            // fetch user details into redux state and 
-            // populate form fields with reset()
+            setTitle('Edit product'); 
             dispatch(productActions.getById(id)).unwrap()
                 .then(product => reset(product));
-            dispatch(categoryActions.getAll());
         } else {
             setTitle('Add product');
         }
@@ -90,7 +91,7 @@ function AddEditProduct() {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row"> 
                     <div className='mb-3 col-12'>
-                    <input type="file" {...register('file')} onChange={(healdfile)}></input>
+                    <input type="file" {...register('urlImg')} onChange={(healdfile)}></input>
                     { file ? <img alt="Preview" height="60" src={URL.createObjectURL(file)} /> : null }
                     </div>
                     <div className="mb-3 col-12">
@@ -110,7 +111,7 @@ function AddEditProduct() {
                         </div>
                         <div className="mb-3 col-4">
                             <label className="form-label">Category</label><br></br>
-                            <select {...register("category")}>
+                            <select {...register("category")} className='selectroCategory'>
                             {categories?.value?.map(category =>
                                 <option value={category.name}>{category.name}</option>
                                 )}

@@ -35,7 +35,7 @@ function fakeBackendProduct() {
                 const product = body();
 
                 if (products.find(x => x.name === product.name)) {
-                    return error('Product "' + product.name + '" is already taken')
+                    return error('Product "' + product.name + '"creaded in base')
                 }
 
                 product.id = products.length ? Math.max(...products.map(x => x.id)) + 1 : 1;
@@ -99,8 +99,8 @@ function fakeBackendProduct() {
 
             function basicDetails(product) {
 
-                const { id, file, name, cant, price, category, categoryDescription } = product;
-                return { id, file, name, cant, price,  category, categoryDescription };
+                const { id, urlImg, name, cant, price, category, categoryDescription } = product;
+                return { id, urlImg, name, cant, price,  category, categoryDescription };
             }
 
             function isAuthenticated() {
