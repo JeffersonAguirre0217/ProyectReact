@@ -56,27 +56,9 @@ function createExtraActions() {
             `${name}/update`,
             async function ({ id, data }, { getState, dispatch }) {
                 await fetchWrapper.put(`${baseUrl}/${id}`, data);
-
-                // update stored category
-                //const category = getState().categories.value.find(id);
-                
-                //if (id === category?.id.toString()) {
-                    //const categories = { ...category, ...data };
-                    //localStorage.setItem('react-and-redux-categories', JSON.stringify(categories));
-                    
-                    //dispatch(setUpdate(categories));
-                    
-                //}
             }
         );
     }
-
-    //function setUpdate(state, action){
-        //state.item = [
-            //{value: action.payload}
-            //description: action.payload.description
-        //]
-    //}
 
     // prefixed with underscore because delete is a reserved word in javascript
     function _delete() {
@@ -84,11 +66,6 @@ function createExtraActions() {
             `${name}/delete`,
             async function (id, { getState, dispatch }) {
                 await fetchWrapper.delete(`${baseUrl}/${id}`);
-
-                // auto logout if the logged in user deleted their own record
-                //if (id === getState().auth.value?.id) {
-                  //  dispatch(authActions.logout());
-                //}
             }
         );
     }

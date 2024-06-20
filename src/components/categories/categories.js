@@ -1,20 +1,30 @@
 import './categories.css';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { categoryActions} from '../../redux/categorySlice';
+//import { useSelector, useDispatch } from 'react-redux';
+//import { categoryActions} from '../../redux/categorySlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faDeleteLeft, faEye } from '@fortawesome/free-solid-svg-icons';
 
+import { storeCategories } from '../../zustand/storeZustand';
+import { actionCategories } from '../../zustand/categoryZustand';
+//import  { actionCategories } from '../../zustand/categoryZustand';
+
+
 function Categories(){
 
-    const categories = useSelector(x => x.categories.list);
-    const dispatch = useDispatch(); 
+    const categories = storeCategories(state => state.categories);
+    
+    //reduces
+    //const categories = useSelector(x => x.categories.list);
+    //const dispatch = useDispatch(); 
+
+    
     
     useEffect(()=> {
-        dispatch(categoryActions.getAll());
+        console.log(categories);
+        //dispatch(categoryActions.getAll());
     },[]);
 
     return(
@@ -32,7 +42,7 @@ function Categories(){
                     </tr>
                 </thead>
                 <tbody>
-                    {categories?.value?.map(category =>
+                    {categories?.map(category =>
                         <tr key={category.id}>
                             <td>{category.id}</td>
                             <td>{category.name}</td>
@@ -41,12 +51,12 @@ function Categories(){
                             <td style={{ whiteSpace: 'nowrap' }}>
                                 <Link to={`edit/${category.id}`} className="btn btn-sm btn-secondary me-1"><FontAwesomeIcon icon={faEye} className='m-0'/></Link>
                                 <Link to={`edit/${category.id}`} className="btn btn-sm btn-primary me-1"><FontAwesomeIcon icon={faEdit} className='m-0'/></Link>
-                                <button onClick={() => dispatch(categoryActions.delete(category.id))} className="btn btn-sm btn-danger">
+                                {<button onClick={() => actionCategories.deleteCaregory(category.id)} className="btn btn-sm btn-danger">
                                     {category.isDeleting 
                                         ? <span className="spinner-border spinner-border-sm"></span>
                                         : <span><FontAwesomeIcon icon={faDeleteLeft} className='m-0'/></span>
                                     }
-                                </button>
+                                </button> }
                             </td>
                         </tr>
                     )}
