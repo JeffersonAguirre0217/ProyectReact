@@ -2,17 +2,18 @@ import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+//import { useDispatch } from 'react-redux';
 
 import { history } from '../../shared/helper/history';
 import { userActions } from '../../../redux/userSlice';
-import { alertActions } from '../../../redux/alertSlice';
+import { actionUser } from '../../../zustand/userZustand';
+//import { alertActions } from '../../../redux/alertSlice';
 
-import { Alert } from '../../shared/alert/alertLogin';
+//import { Alert } from '../../shared/alert/alertLogin';
 
 function Register(){
 
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
@@ -33,22 +34,27 @@ function Register(){
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
-    async function onSubmit(data) {
-        dispatch(alertActions.clear());
-        try {
-            await dispatch(userActions.register(data)).unwrap();
+    // async function onSubmit(data) {
+    //     //dispatch(alertActions.clear());
+    //     try {
+    //         await dispatch(userActions.register(data)).unwrap();
 
-            // redirect to login page and display success alert
-            history.navigate('/login');
-            dispatch(alertActions.success({ message: 'Registration successful', showAfterRedirect: true }));
-        } catch (error) {
-            dispatch(alertActions.error(error));
-        }
-    } 
+    //         // redirect to login page and display success alert
+    //         history.navigate('/login');
+    //         dispatch(alertActions.success({ message: 'Registration successful', showAfterRedirect: true }));
+    //     } catch (error) {
+    //         dispatch(alertActions.error(error));
+    //     }
+    // } 
+
+    function onSubmit(data) {
+        console.log(data)
+        actionUser.registerUser(data);
+        history.navigate('/login');
+    }
 
     return(
         <div className="container">
-            <Alert/>
             <div className='mt-4'><h4>REGISTER</h4></div>
             <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-3">

@@ -4,16 +4,17 @@ import './login.css';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+//import { useDispatch } from 'react-redux';
 
 import { authActions } from '../../../redux/authSlice';
+import { actionAuth } from '../../../zustand/authZustand';
 
-import {Alert} from '../../shared/alert/alertLogin';
+//import {Alert} from '../../shared/alert/alertLogin';
 //import { useSelector, useDispatch } from 'react-redux';
 //import { changeEmail } from '../../../redux/userSlice';
 
 function Login() {
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
     //const user = useSelector((state) => state.user);
 
     // form validation rules 
@@ -29,7 +30,8 @@ function Login() {
     const { errors, isSubmitting } = formState;
 
     function onSubmit({ username, password }) {
-        return dispatch(authActions.login({ username, password }));
+        //return dispatch(authActions.login({ username, password }));
+        actionAuth.login({username, password})
     }
 
 
@@ -39,7 +41,6 @@ function Login() {
             <div className="row m-0 p-0">
                 <div className="col-4">
                     <div className='cintainer'>
-                        <Alert/>
                         <div className='text-center mt-5'><h4>LOGIN</h4></div>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-3">

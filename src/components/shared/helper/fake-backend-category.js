@@ -59,7 +59,7 @@ function fakeBackendCategory() {
             }
 
             function updateCategory() {
-                const categoriesObject = [];
+                
                 if (!isAuthenticated()) return unauthorized();
 
                 let params = body();

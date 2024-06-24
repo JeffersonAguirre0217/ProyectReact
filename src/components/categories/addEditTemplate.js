@@ -3,14 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-//import { useSelector, useDispatch } from 'react-redux';
 
 import { history } from '../shared/helper/history';
-import { categoryActions } from '../../redux/categorySlice';
-import { alertActions } from '../../redux/alertSlice';
-import { Alert } from '../shared/alert/alertLogin';
 
-//import { storeCategories } from '../../zustand/storeZustand';
 import  { actionCategories } from '../../zustand/categoryZustand';
 
 export { AddEdit };
@@ -18,11 +13,12 @@ export { AddEdit };
 function AddEdit() {
     const { id } = useParams();
     const [title, setTitle] = useState();
-    //const dispatch = useDispatch();
-    // const category = useSelector(x => x.categories?.item);
-
-    ///zus
-    
+    const styleOptions={
+        buttonAdd:'bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 w-40 py-2  rounded-full',
+        buttonSave:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
+        buttonReset:'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300 py-2 px-3 m-0  rounded-md',
+        buttonBack:'bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 py-2 px-3 m-1  rounded-md',
+    }
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
@@ -33,7 +29,7 @@ function AddEdit() {
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
 
-    // get functions to build form with useForm() hook
+    //useForm() hook
     const { register, handleSubmit, reset, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
@@ -41,53 +37,27 @@ function AddEdit() {
         if (id) {
             setTitle('Edit category');
             const category = actionCategories.getById(id)
-            // dispatch(categoryActions.getById(id)).unwrap()
-            //     .then(category => reset(category));
         } else {
             setTitle('Add category');
         }
     }, []);
 
-    // async function onSubmit(data) {
-    //     //dispatch(alertActions.clear());
-    //     try {
-            
-    //         let message;
-    //         if (id) {
-    //             await dispatch(categoryActions.update({ id, data })).unwrap();
-    //             message = 'category updated';
-    //         } else {
-    //             await dispatch(categoryActions.create(data)).unwrap();
-    //             message = 'Category added';
-    //         }
-
-    //         history.navigate('/categories');
-    //         dispatch(alertActions.success({ message, showAfterRedirect: true }));
-    //     } catch (error) {
-    //         dispatch(alertActions.error(error));
-            
-    //     }
-    // }
-
-    function onSubmitCategory(data){
+    function onSubmit(data){
         
         if(id){
             actionCategories.updateCategory(id, data)
-            console.log('here', id, data);
+            
         }else{
-            actionCategories.addNewCategory(data);
+            actionCategories.addNewCategory(data)
         }
-        history.navigate('/categories');
 
-        
+        history.navigate('/categories')
     }
 
     return (
         <div className='mt-3'>
-            <Alert/>
             <h2>{title}</h2>
-            
-                <form onSubmit={handleSubmit(onSubmitCategory)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
                         <div className="mb-3 col">
                             <label className="form-label">Category</label>
@@ -101,25 +71,14 @@ function AddEdit() {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button type="submit" disabled={isSubmitting} className="btn btn-primary me-2">
+                        <button type="submit" disabled={isSubmitting} className={styleOptions.buttonSave}>
                             {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
                             Save
                         </button>
-                        <button onClick={() => reset()} type="button" disabled={isSubmitting} className="btn btn-secondary">Reset</button>
-                        <Link to="/categories" className="btn btn-danger m-2">Cancel</Link>
+                        <button onClick={() => reset()} type="button" disabled={isSubmitting} className={styleOptions.buttonReset}>Reset</button>
+                        <Link to="/categories"><button className={styleOptions.buttonBack}>Cancel</button></Link>
                     </div>
-                </form>
-            
-            
-                {/* <div className="text-center m-5">
-                    <span className="spinner-border spinner-border-lg align-center"></span>
-                </div>
-            
-            
-                <div class="text-center m-5">
-                    <div class="text-danger">Error loading user: </div>
-                </div> */}
-            
+                </form>            
         </div>
     );
 }

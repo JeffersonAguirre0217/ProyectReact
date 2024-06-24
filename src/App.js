@@ -6,6 +6,7 @@ import Layout from "./layout/layout.js";
 
 import Login from "./components/auth/login/login.js";
 import Register from "./components/auth/register/register.js";
+import { storeApp } from "./zustand/storeZustand.js";
 
 
 
@@ -14,7 +15,8 @@ function App() {
   history.navigate = useNavigate();
   history.location = useLocation();
 
-  const auth = useSelector(x => x.auth.value);
+  const auth = storeApp(state => state.auth)
+  
   //const auth = true;
   if(auth){
     return <Layout/>;

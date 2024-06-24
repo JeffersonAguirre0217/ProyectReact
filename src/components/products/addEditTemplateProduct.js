@@ -3,13 +3,15 @@ import { Link, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux';
+//import { useSelector, useDispatch } from 'react-redux';
 
 import { history } from '../shared/helper/history';
-import { productActions } from '../../redux/productSlice';
-import { categoryActions } from '../../redux/categorySlice';
-import { alertActions } from '../../redux/alertSlice';
-import { Alert } from '../shared/alert/alertLogin';
+import { storeApp } from '../../zustand/storeZustand';
+import { actionProducts } from '../../zustand/productZustand';
+// import { productActions } from '../../redux/productSlice';
+// import { categoryActions } from '../../redux/categorySlice';
+// import { alertActions } from '../../redux/alertSlice';
+// import { Alert } from '../shared/alert/alertLogin';
 
 export { AddEditProduct };
 
@@ -17,21 +19,25 @@ function AddEditProduct() {
     const { id } = useParams();
     const [title, setTitle] = useState();
     const [file, setFile] = useState(null);
-    const dispatch = useDispatch();
-    const product = useSelector(x => x.products?.item);
-    const categories = useSelector(x => x.categories?.list);
-    let urlImg = '';
+    const styleOptions={
+        buttonAdd:'file:bg-violet-500 file:hover:bg-violet-600 file:active:bg-violet-700 file:focus:outline-none file:focus:ring file:focus:ring-violet-300 file:text-white w-auto file:py-2  file:rounded-md',
+        buttonSave:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
+        buttonReset:'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300 py-2 px-3 m-0  rounded-md',
+        buttonBack:'bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 py-2 px-3 m-1  rounded-md',
+    }
+    const product = actionProducts.getById(id);
+    console.log(product)
+    const categories = storeApp(state => state.categories.list)
     
 
     function healdfile(e){
-        setFile(e.target.files[0]);    
-        urlImg = URL.createObjectURL(e.target.files[0])
+        setFile(e.target.files[0]);   
     }
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
         urlImg: Yup.string()
-            .required('Product imge is required'),
+            .required('Product name is required'),
         name: Yup.string()
             .required('Product name is required'),
         cant: Yup.string()
@@ -46,52 +52,39 @@ function AddEditProduct() {
     const formOptions = { resolver: yupResolver(validationSchema) };
 
     // get functions to build form with useForm() hook
-    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { register, handleSubmit, reset, formState,  } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
     useEffect(() => {
-        //initialice categories
-        dispatch(categoryActions.getAll());
-
         if (id) {
             setTitle('Edit product'); 
-            dispatch(productActions.getById(id)).unwrap()
-                .then(product => reset(product));
         } else {
             setTitle('Add product');
         }
     }, []);
-
-    async function onSubmit(data) {
-        dispatch(alertActions.clear());
-        try {
-            // create or update user based on id param
-            let message;
-            if (id) {
-                await dispatch(productActions.update({ id, data })).unwrap();
-                message = 'category updated';
-            } else {
-                await dispatch(productActions.create(data)).unwrap();
-                message = 'Category added';
-            }
-
-            // redirect to user list with success message
-            history.navigate('/products');
-            dispatch(alertActions.success({ message, showAfterRedirect: true }));
-        } catch (error) {
-            dispatch(alertActions.error(error));
+    function onSubmit(data){
+        data.urlImg = URL.createObjectURL(file)
+        console.log('dat', data)
+        debugger
+        //debugger
+        if(id){
+            actionProducts.updateProduct(id, data)
+        }else{
+            actionProducts.addNewProduct(data)
         }
+
+        history.navigate('/products')
     }
 
     return (
         <div className='mt-3'>
-            <Alert />
+            
             <h2>{title}</h2>
-            {!(product?.loading || product?.error) &&
+            
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row"> 
                     <div className='mb-3 col-12'>
-                    <input type="file" {...register('urlImg')} onChange={(healdfile)}></input>
+                    <input type="file" className={styleOptions.buttonAdd} {...register('urlImg')} onChange={(healdfile)}></input>
                     { file ? <img alt="Preview" height="60" src={URL.createObjectURL(file)} /> : null }
                     </div>
                     <div className="mb-3 col-12">
@@ -112,8 +105,8 @@ function AddEditProduct() {
                         <div className="mb-3 col-4">
                             <label className="form-label">Category</label><br></br>
                             <select {...register("category")} className='selectroCategory'>
-                            {categories?.value?.map(category =>
-                                <option value={category.name}>{category.name}</option>
+                            {categories.map(category =>
+                                <option id={category.id} value={category.name}>{category.name}</option>
                                 )}
                             </select>
                         </div>
@@ -124,16 +117,16 @@ function AddEditProduct() {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <button type="submit" disabled={isSubmitting} className="btn btn-primary me-2">
+                        <button type="submit" disabled={isSubmitting} className={styleOptions.buttonSave}>
                             {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
                             Save
                         </button>
-                        <button onClick={() => reset()} type="button" disabled={isSubmitting} className="btn btn-secondary">Reset</button>
-                        <Link to="/products" className="btn btn-danger m-2">Cancel</Link>
+                        <button onClick={() => reset()} type="button" disabled={isSubmitting} className={styleOptions.buttonReset}>Reset</button>
+                        <Link to="/products"><button className={styleOptions.buttonBack}>Cancel</button></Link>
                     </div>
                 </form>
-            }
-            {product?.loading &&
+            
+            {/* {product?.loading &&
                 <div className="text-center m-5">
                     <span className="spinner-border spinner-border-lg align-center"></span>
                 </div>
@@ -141,8 +134,8 @@ function AddEditProduct() {
             {product?.error &&
                 <div class="text-center m-5">
                     <div class="text-danger">Error loading user: {product.error}</div>
-                </div>
-            }
+                </div> */}
+            
         </div>
     );
 }

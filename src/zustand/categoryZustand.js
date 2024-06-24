@@ -1,53 +1,54 @@
 import { produce } from 'immer';
-import { storeCategories } from './storeZustand';
+import { storeApp } from './storeZustand';
 
 
-const { setState, getState } = storeCategories
+const { setState, getState } = storeApp
 
 const addCategory = ((newCategory) => {
-    const category = getState().categories
+    const category = getState().categories.list
     const id = category.length ? Math.max(...category.map(x => x.id)) + 1 : 1;
     newCategory.id = id;
-
     setState(
         produce(state => {
-            state.categories = [...category, newCategory]
+            state.categories.list = [...category, newCategory]
         }
-        ))
+    ))
 })
 
 const _getById = ((id) => {
-    const categories = getState().categories
-    const category = categories.find(x => x.id === id)
-    return (category)
+    const categories = getState().categories.list
+    const category = categories.find(x => Number(x.id) === Number(id))
+    return category
 
 })
 
 const _updateCategory = ((id, data) => {
-    const categories = getState().categories
-    const category = categories.find(x => x.id == id)
-    
-    let newCategories = [...categories ] 
-    debugger
-    newCategories[id - 1 ].name = data.name
-    newCategories[id - 1 ].description = data.description
+    const categories = getState().categories.list
+    const newData = { ...data, id }
+    const newCategories = categories.map((category) => {
+        if (Number(category.id) === Number(id)) {
+            return newData
+        } else {
+            return category
+        }
+    })
     
     setState(
         produce(state => {
-            state.categories = newCategories
+            state.categories.list = newCategories
         }
-        ))
-    console.log('up', category);
+    ))
+
 })
 
 const _deleteCategory = ((id) => {
-    const categories = getState().categories
+    const categories = getState().categories.list
     const category = categories.filter(x => x.id !== id);
     setState(
         produce(state => {
-            state.categories = category
+            state.categories.list = category
         }
-        ))
+    ))
 })
 
 

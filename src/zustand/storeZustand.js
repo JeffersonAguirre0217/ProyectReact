@@ -4,15 +4,32 @@ import { persist, devtools } from 'zustand/middleware';
 
 // init data
 
-const categoriesInitialState = {
-    categories: [],
-    products: [],
-    auth: null
+const initialStateCategories = {
+    list: [],
+    loading: false
 }
 
-export  const categoriesSlice = () =>  categoriesInitialState;
-const persistCategories = persist(categoriesSlice, {name: 'categories'}); 
-export const storeCategories = create(devtools(persistCategories));
+const initialStateProducts = {
+    list: [],
+    loading: false
+}
+
+const initialStateUsers = {
+    list: []
+}
+
+const auth = null
+
+const initialState ={
+    categories :initialStateCategories,
+    products: initialStateProducts,
+    users: initialStateUsers,
+    auth: auth
+}
+
+export  const initialiceSlice = () =>  initialState;
+const persistInitialState = persist(initialiceSlice, {name: 'storeApp'}); 
+export const storeApp = create(devtools(persistInitialState));
 
 
 

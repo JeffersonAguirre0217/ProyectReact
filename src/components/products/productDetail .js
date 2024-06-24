@@ -1,23 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
-
-import { productActions } from '../../redux/productSlice';
+import { actionProducts } from '../../zustand/productZustand';
 
 export { ProductDetail };
 
 function ProductDetail() {
     const { id } = useParams();
     const [title, setTitle] = useState();
-    const dispatch = useDispatch();
-    const product = useSelector(x => x.products?.item);
+    const product = actionProducts.getById(id)
     
 
     useEffect(() => {
-        setTitle('Detail of ');
-        dispatch(productActions.getById(id)).unwrap()
-        .then();
+        setTitle('Detail of ' + product.name );
     }, []);
 
 
@@ -32,23 +26,27 @@ function ProductDetail() {
                         </div>
                         <div className="mb-2 col">
                             <label className="form-label">Product</label>
+                            <h4>{product.name}</h4>
                             <p></p>
                         </div>
                         <div className="mb-2 col-3">
                             <label className="form-label">Cant</label>
+                            <h4>{product.cant}</h4>
                             <p></p>
                         </div>
                         <div className="mb-2 col-3">
                             <label className="form-label">Price</label>
+                            <h4>{product.price}</h4>
                             <p></p>
                         </div>
                         <div className="mb-2 col-3">
                             <label className="form-label">Category</label>
+                            <h4>{product.category}</h4>
                             <p></p>
                         </div>
                         <div className="mb-2 col-12">
                             <label className="form-label">description</label>
-                            <p></p>
+                            <p>{product.categoryDescription}</p>
                         </div>
                         <div className="mb-3">
                             <Link to="/products" className="btn btn-danger m-2">Back</Link>

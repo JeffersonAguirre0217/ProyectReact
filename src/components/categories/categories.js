@@ -1,57 +1,63 @@
 import './categories.css';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-//import { useSelector, useDispatch } from 'react-redux';
-//import { categoryActions} from '../../redux/categorySlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faDeleteLeft, faEye } from '@fortawesome/free-solid-svg-icons';
 
-import { storeCategories } from '../../zustand/storeZustand';
+import { storeApp } from '../../zustand/storeZustand';
 import { actionCategories } from '../../zustand/categoryZustand';
-//import  { actionCategories } from '../../zustand/categoryZustand';
 
 
 function Categories(){
 
-    const categories = storeCategories(state => state.categories);
+    const categories = storeApp(state => state.categories.list);
     
-    //reduces
-    //const categories = useSelector(x => x.categories.list);
-    //const dispatch = useDispatch(); 
+    const loading = false///storeCategories(state => state.loading)
 
-    
+    const styleCategory={
+        buttonAddCategory:'bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 w-40 py-2  rounded-full',
+        buttonUpdate:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-1 px-2 m-1  rounded-md',
+        buttonDetail:'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300 py-1 px-2 m-0  rounded-md',
+        buttonDelete:'bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 py-1 px-2 m-0  rounded-md',
+    }
     
     useEffect(()=> {
-        console.log(categories);
-        //dispatch(categoryActions.getAll());
+    
     },[]);
 
     return(
-        <div>
+        <div className='container py-3'>
         <h2>Categories</h2>
-            <Link to="add" className="btn btn-sm btn-success mb-2">Add category</Link>
-            {!(categories?.loading || categories?.error) &&
-            <table className="table table-striped">
+            <Link to="add" className='block py-2'>
+            <button className={styleCategory.buttonAddCategory}>Add Category</button>
+            </Link>
+            {!(loading) &&
+            <table className="table-fixed border border-slate-500">
                 <thead>
                     <tr>
-                        <th style={{ width: '10%' }}>id</th>
+                        <th style={{ width: '10%' }}>N°</th>
                         <th style={{ width: '30%' }}>Name</th>
                         <th style={{ width: '30%' }}>description</th>
                         <th style={{ width: '20%' }}></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {categories?.map(category =>
-                        <tr key={category.id}>
-                            <td>{category.id}</td>
+                    {categories?.map((category, index) =>
+                        <tr  className='border border-slate-500 py-6 center' key={category.id}>
+                            <td>{index + 1}</td>
                             <td>{category.name}</td>
                             <td>{category.description}</td>
                             <td></td>
                             <td style={{ whiteSpace: 'nowrap' }}>
-                                <Link to={`edit/${category.id}`} className="btn btn-sm btn-secondary me-1"><FontAwesomeIcon icon={faEye} className='m-0'/></Link>
-                                <Link to={`edit/${category.id}`} className="btn btn-sm btn-primary me-1"><FontAwesomeIcon icon={faEdit} className='m-0'/></Link>
-                                {<button onClick={() => actionCategories.deleteCaregory(category.id)} className="btn btn-sm btn-danger">
+                                <Link to={`edit/${category.id}`} className={styleCategory.buttonDetail}>
+                                    <button><FontAwesomeIcon icon={faEye} className='m-0'/></button>
+                                </Link>
+                                
+                                <Link to={`edit/${category.id}`} >
+                                <button className={styleCategory.buttonUpdate}><FontAwesomeIcon icon={faEdit} className='m-0'/></button>
+                                </Link>
+                                {<button onClick={() => actionCategories.deleteCaregory(category.id)} className={styleCategory.buttonDelete}>
                                     {category.isDeleting 
                                         ? <span className="spinner-border spinner-border-sm"></span>
                                         : <span><FontAwesomeIcon icon={faDeleteLeft} className='m-0'/></span>
@@ -63,12 +69,12 @@ function Categories(){
                 </tbody>
             </table>
             }
-            {categories?.loading &&
+            {loading &&
                 <div className="text-center m-5">
                     <span className="spinner-border spinner-border-lg align-center"></span>
                 </div>
             }
-            {categories?.error &&
+            {loading?.error &&
                 <div class="text-center m-5">
                     <div class="text-danger">Error loading  {categories.error}</div>
                 </div>
