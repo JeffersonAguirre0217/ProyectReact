@@ -63,7 +63,7 @@ function AddEditProduct() {
         }
     }, []);
     function onSubmit(data){
-        data.urlImg = URL.createObjectURL(file)
+        //data.urlImg = URL.createObjectURL(file)
         console.log('dat', data)
         debugger
         //debugger
