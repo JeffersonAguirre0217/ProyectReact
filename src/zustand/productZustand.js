@@ -45,7 +45,6 @@ const _updateProduct = ((id, data) => {
 const _deleteProduct = ((id) => {
     const products = getState().products.list
     const product = products.filter(x => x.id !== id);
-    debugger
     setState(
         produce(state => {
             state.products.list = product

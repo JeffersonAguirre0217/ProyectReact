@@ -35,8 +35,7 @@ function Products(){
                     <div key={index} id='cardProduct' className='grid grid-cols-1 my-3 rounded-md'>
                         <div className='row'>
                             <div className='col-lg-2 col-sm-12 text-center'>
-                                {product.urlImg ? <img className='img-product mt-2' src={product.urlImg } alt={product.name} /> : <img className='img-product mt-2' src="https://cdn.icon-icons.com/icons2/943/PNG/512/shoppaymentorderbuy-10_icon-icons.com_73874.png" alt="..." />}
-                                {/* <img src={`data:image/jpeg;base64,${img.img64}`} /> */}
+                                {product.urlImg ? <img className='img-product mt-2' src={`data:image/jpeg;base64,${product.urlImg}`} alt={product.name} /> : <img className='img-product mt-2' src="https://cdn.icon-icons.com/icons2/943/PNG/512/shoppaymentorderbuy-10_icon-icons.com_73874.png" alt="..." />}
                             </div>
                             <div className='col-lg-7 col-sm-12'>
                                 <div className="card-body">

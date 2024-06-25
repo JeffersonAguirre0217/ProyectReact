@@ -17,7 +17,6 @@ function AddEditProduct() {
     const [base64, setBase64] = useState(null);
     const product = actionProducts.getById(id)
     const categories = storeApp(state => state.categories.list)
-    let imgBase64Id = null
 
     const styleOptions = {
         buttonAdd: 'file:bg-violet-500 file:hover:bg-violet-600 file:active:bg-violet-700 file:focus:outline-none file:focus:ring file:focus:ring-violet-300 file:text-white w-auto file:py-2  file:rounded-md',
@@ -47,11 +46,11 @@ function AddEditProduct() {
         urlImg: Yup.string()
             .required('Product name is required'),
         name: Yup.string()
-            .required('Product name is required'),
+            .required('Product name is required').min(4, 'Product name must be at least 4 characters'),
         cant: Yup.string()
-            .required('Cant is required'),
+            .required('Cant is required').max(5, 'Cant only can to have 4 characters'),
         price: Yup.string()
-            .required('Price is required'),
+            .required('Price is required').max(5, 'Cant only can to have 4 characters'),
         category: Yup.string()
             .required('Category is required'),
         categoryDescription: Yup.string()
@@ -65,45 +64,28 @@ function AddEditProduct() {
 
     function healdfile(e) {
         setFile(e.target.files[0]);
-        //covertImgeToBase64(e.target.files[0])
-        //debugger
     }
 
-    function covertImgeToBase64(newFile) {
-        let imgs = JSON.parse(localStorage.getItem('imgTest')) || [];
-        let fileTemp = {
-            id: null,
-            img64: null
-        };
-        let reader = new FileReader();
-        reader.readAsDataURL(newFile);
-        reader.onload = function () {
-            //debugger
-            let auxiliar
-            let temp
-            auxiliar = reader.result;
-            if (auxiliar) {
-                temp = auxiliar.split(',')
-                //fileTemp.id = imgs.length ? Math.max(...imgs.map(x => x.id)) + 1 : 1;
-                fileTemp.img64 = temp[1]
-                //setBase64(fileTemp);
-                //debugger
-                //imgs.push(fileTemp);
-                //imgBase64Id = fileTemp.id
-                //localStorage.setItem('imgTest', JSON.stringify(imgs)); 
-            }
-        };
-        console.log('img', fileTemp)
-        return fileTemp
+    async function convertToBase64(file) {
+        if (!file) return null;
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onloadend = () => {
+                const base64 = btoa(reader.result);
+                resolve(base64);
+            };
+            reader.onerror = (error) => reject(error);
+        });
     }
 
-    function onSubmit(data) {
+    async function onSubmit(data) {
 
         if (file) {
-            data.urlImg = covertImgeToBase64(file)
+            data.urlImg = await convertToBase64(file)
+        }else{
+            data.urlImg = null
         }
-
-        console.log('newData', data)
 
         if (id) {
             actionProducts.updateProduct(id, data)
@@ -111,8 +93,7 @@ function AddEditProduct() {
             actionProducts.addNewProduct(data)
         }
 
-        // history.navigate('/products')
-
+        history.navigate('/products')
     }
 
     return (
