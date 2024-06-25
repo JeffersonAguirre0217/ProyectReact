@@ -3,15 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-//import { useSelector, useDispatch } from 'react-redux';
 
 import { history } from '../shared/helper/history';
 import { storeApp } from '../../zustand/storeZustand';
 import { actionProducts } from '../../zustand/productZustand';
-// import { productActions } from '../../redux/productSlice';
-// import { categoryActions } from '../../redux/categorySlice';
-// import { alertActions } from '../../redux/alertSlice';
-// import { Alert } from '../shared/alert/alertLogin';
 
 export { AddEditProduct };
 
@@ -19,20 +14,32 @@ function AddEditProduct() {
     const { id } = useParams();
     const [title, setTitle] = useState();
     const [file, setFile] = useState(null);
-    const styleOptions={
-        buttonAdd:'file:bg-violet-500 file:hover:bg-violet-600 file:active:bg-violet-700 file:focus:outline-none file:focus:ring file:focus:ring-violet-300 file:text-white w-auto file:py-2  file:rounded-md',
-        buttonSave:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
-        buttonReset:'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300 py-2 px-3 m-0  rounded-md',
-        buttonBack:'bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 py-2 px-3 m-1  rounded-md',
-    }
-    const product = actionProducts.getById(id);
-    console.log(product)
+    const product = actionProducts.getById(id)
     const categories = storeApp(state => state.categories.list)
+    let imgBase64Id = null
     
-
-    function healdfile(e){
-        setFile(e.target.files[0]);   
+    const styleOptions = {
+        buttonAdd: 'file:bg-violet-500 file:hover:bg-violet-600 file:active:bg-violet-700 file:focus:outline-none file:focus:ring file:focus:ring-violet-300 file:text-white w-auto file:py-2  file:rounded-md',
+        buttonSave: 'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
+        buttonReset: 'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300 py-2 px-3 m-0  rounded-md',
+        buttonBack: 'bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 py-2 px-3 m-1  rounded-md',
     }
+
+    useEffect(() => {
+        
+        if (id) {
+            setTitle('Edit product');
+            setValue('name', product.name,)
+            setValue('cant', product.cant)
+            setValue('price', product.price)
+            setValue('categoryDescription', product.categoryDescription)
+            setValue('category', product.category)
+            
+        } else {
+            setTitle('Add product');
+        }
+
+    }, []);
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
@@ -52,24 +59,47 @@ function AddEditProduct() {
     const formOptions = { resolver: yupResolver(validationSchema) };
 
     // get functions to build form with useForm() hook
-    const { register, handleSubmit, reset, formState,  } = useForm(formOptions);
+    const { register, handleSubmit, reset, setValue, formState, } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
-    useEffect(() => {
-        if (id) {
-            setTitle('Edit product'); 
-        } else {
-            setTitle('Add product');
-        }
-    }, []);
-    function onSubmit(data){
-        //data.urlImg = URL.createObjectURL(file)
-        console.log('dat', data)
-        debugger
+    function healdfile(e) {
+        setFile(e.target.files[0]);
+        covertImgeToBase64(e.target.files[0])
+    }
+    
+    function covertImgeToBase64(newFile) {
+        let imgs = JSON.parse(localStorage.getItem('imgTest')) || [];
+        let file = {};
+        let reader = new FileReader();
+        reader.readAsDataURL(newFile);
+        reader.onload = function () {
+            let auxiliar
+            let temp
+            auxiliar = reader.result;
+            if(auxiliar){
+                temp = auxiliar.split(',')
+                file.id = imgs.length ? Math.max(...imgs.map(x => x.id)) + 1 : 1;
+                file.img64 = temp[1]
+                imgs.push(file);
+                imgBase64Id = file.id
+                //setValue('urlImg', imgBase64Id)
+                console.log('IMG', imgBase64Id)
+                //localStorage.setItem('imgTest', JSON.stringify(imgs)); 
+            }
+        };
+        
+    }
+
+    function onSubmit(data) {
+        //console.log('img64', imgBase64Id)
+        /* if(imgBase64){
+            data.urlImg = imgBase64
+        }*/
+
         //debugger
-        if(id){
+        if (id) {
             actionProducts.updateProduct(id, data)
-        }else{
+        } else {
             actionProducts.addNewProduct(data)
         }
 
@@ -78,16 +108,16 @@ function AddEditProduct() {
 
     return (
         <div className='mt-3'>
-            
+
             <h2>{title}</h2>
             
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="row"> 
-                    <div className='mb-3 col-12'>
-                    <input type="file" className={styleOptions.buttonAdd} {...register('urlImg')} onChange={(healdfile)}></input>
-                    { file ? <img alt="Preview" height="60" src={URL.createObjectURL(file)} /> : null }
-                    </div>
-                    <div className="mb-3 col-12">
+                    <div className="row">
+                        <div className='mb-3 col-12'>
+                            <input type="file" className={styleOptions.buttonAdd} {...register('urlImg')} onChange={(healdfile)}></input>
+                            {file ? <img alt="Preview" height="60" src={URL.createObjectURL(file)} /> : null}
+                        </div>
+                        <div className="mb-3 col-12">
                             <label className="form-label">Product</label>
                             <input name="lastName" type="text" {...register('name')} className={`form-control ${errors.cant ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback">{errors.name?.message}</div>
@@ -105,8 +135,8 @@ function AddEditProduct() {
                         <div className="mb-3 col-4">
                             <label className="form-label">Category</label><br></br>
                             <select {...register("category")} className='selectroCategory'>
-                            {categories.map(category =>
-                                <option id={category.id} value={category.name}>{category.name}</option>
+                                {categories.map(category =>
+                                    <option key={category.id}>{category.name}</option>
                                 )}
                             </select>
                         </div>
@@ -126,16 +156,16 @@ function AddEditProduct() {
                     </div>
                 </form>
             
-            {/* {product?.loading &&
+            {/* {
                 <div className="text-center m-5">
                     <span className="spinner-border spinner-border-lg align-center"></span>
                 </div>
-            }
-            {product?.error &&
+            } */}
+            {/*product?.error &&
                 <div class="text-center m-5">
                     <div class="text-danger">Error loading user: {product.error}</div>
                 </div> */}
-            
+
         </div>
     );
 }

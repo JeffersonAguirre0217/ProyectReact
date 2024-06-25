@@ -1,9 +1,5 @@
 import './layout.css';
-import {
-    Routes,
-    Route,
-    Link,
-} from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDashboard, faLayerGroup, faList, } from '@fortawesome/free-solid-svg-icons';
 
@@ -16,40 +12,51 @@ import { Nav } from './nav.jsx';
 import { ProductDetail } from '../components/products/productDetail .js';
 
 function Layout() {
+
+    const initData = [
+        {
+            icon: faDashboard,
+            name: 'Dashboard',
+            path: '/'
+        },
+        {
+            icon: faList,
+            name: 'Categories',
+            path: '/categories'
+        },
+        {
+            icon: faLayerGroup,
+            name: 'Products',
+            path: '/products'
+        }
+    ]
+
+    const styleLoyout = {
+
+    }
+
+
     return (
         <div id='Layout' >
             <Nav></Nav>
-            <div className="row m-0 p-0">
-                <div className="col-md-2 m-0 p-0">
+            <div className="grid grid-cols-1 sm:grid-cols-5  md:grid-cols-7">
+                <div className="">
                     <ul className="App-header pt-2">
-                        <Link to="/">
-                            <li className='App-link'>
-                                <FontAwesomeIcon icon={faDashboard} className='iconClass'/>
-                                <label className='p-2'>Dashboard</label>
-                            </li>
-                        </Link>
-
-                        <Link to="/categories">
-                            <li className='App-link'>
-                                <FontAwesomeIcon icon={faList} className='iconClass' />  
-                                <label className='p-2'>Categories</label>
-                            </li>
-                        </Link>
-
-                        <Link to="/products">
-                            <li className='App-link'>
-                                <FontAwesomeIcon icon={faLayerGroup} className='iconClass' /> 
-                                <label className='p-2'>Products</label>
-                            </li>
-                        </Link>
-
+                        {initData.map((item, index) =>
+                            <Link key={index} to={item.path}>
+                                <li className='App-link'>
+                                    <FontAwesomeIcon icon={item.icon} className='iconClass' />
+                                    <label className='p-2'>{item.name}</label>
+                                </li>
+                            </Link>
+                        )}
                     </ul>
                 </div>
-                <div className="col-md-10">
+                <div className="col-span-12 md:col-span-6">
                     <div className="container">
                         <Routes>
-                            <Route path="/" element={<Dashboard />}/>
-                            <Route path="/products" element={<Products />}/>
+                            <Route path="/" element={<Dashboard />} />
+                            <Route path="/products" element={<Products />} />
                             <Route path="/products/add" element={<AddEditProduct />} />
                             <Route path="/products/edit/:id" element={<AddEditProduct />} />
                             <Route path="/products/detail/:id" element={<ProductDetail />} />

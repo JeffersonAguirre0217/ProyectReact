@@ -36,20 +36,20 @@ function Categories(){
             <table className="table-fixed border border-slate-500">
                 <thead>
                     <tr>
-                        <th style={{ width: '10%' }}>N°</th>
+                        <th style={{ width: '10%' }} className='px-2'>N°</th>
                         <th style={{ width: '30%' }}>Name</th>
-                        <th style={{ width: '30%' }}>description</th>
+                        <th style={{ width: '30%' }}>Description</th>
                         <th style={{ width: '20%' }}></th>
                     </tr>
                 </thead>
                 <tbody>
                     {categories?.map((category, index) =>
-                        <tr  className='border border-slate-500 py-6 center' key={category.id}>
-                            <td>{index + 1}</td>
-                            <td>{category.name}</td>
-                            <td>{category.description}</td>
+                        <tr  className={`border border-slate-500 py-6 center ${index % 2 ? 'bg-slate-200' : ''}`}  key={index} >
+                            <td className='px-2'>{index + 1}</td>
+                            <td className='px-2'>{category.name}</td>
+                            <td className='px-2'>{category.description}</td>
                             <td></td>
-                            <td style={{ whiteSpace: 'nowrap' }}>
+                            <td style={{ whiteSpace: 'nowrap' }} className='px-2'   >
                                 <Link to={`edit/${category.id}`} className={styleCategory.buttonDetail}>
                                     <button><FontAwesomeIcon icon={faEye} className='m-0'/></button>
                                 </Link>

@@ -13,6 +13,7 @@ export { AddEdit };
 function AddEdit() {
     const { id } = useParams();
     const [title, setTitle] = useState();
+    const category = actionCategories.getById(id)
     const styleOptions={
         buttonAdd:'bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 w-40 py-2  rounded-full',
         buttonSave:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
@@ -30,13 +31,14 @@ function AddEdit() {
     const formOptions = { resolver: yupResolver(validationSchema) };
 
     //useForm() hook
-    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { register, handleSubmit, reset, setValue, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
     useEffect(() => {
         if (id) {
             setTitle('Edit category');
-            const category = actionCategories.getById(id)
+            setValue('name', category.name,)
+            setValue('description', category.description)
         } else {
             setTitle('Add category');
         }
@@ -46,7 +48,6 @@ function AddEdit() {
         
         if(id){
             actionCategories.updateCategory(id, data)
-            
         }else{
             actionCategories.addNewCategory(data)
         }
