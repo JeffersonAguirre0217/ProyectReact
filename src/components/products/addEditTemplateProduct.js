@@ -64,26 +64,26 @@ function AddEditProduct() {
 
     function healdfile(e) {
         setFile(e.target.files[0]);
-        covertImgeToBase64(e.target.files[0])
+        //covertImgeToBase64(e.target.files[0])
+        //debugger
     }
     
     function covertImgeToBase64(newFile) {
         let imgs = JSON.parse(localStorage.getItem('imgTest')) || [];
-        let file = {};
+        let fileTemp = {};
         let reader = new FileReader();
         reader.readAsDataURL(newFile);
         reader.onload = function () {
+            //debugger
             let auxiliar
             let temp
             auxiliar = reader.result;
             if(auxiliar){
                 temp = auxiliar.split(',')
-                file.id = imgs.length ? Math.max(...imgs.map(x => x.id)) + 1 : 1;
-                file.img64 = temp[1]
-                imgs.push(file);
-                imgBase64Id = file.id
-                //setValue('urlImg', imgBase64Id)
-                console.log('IMG', imgBase64Id)
+                fileTemp.id = imgs.length ? Math.max(...imgs.map(x => x.id)) + 1 : 1;
+                fileTemp.img64 = temp[1]
+                imgs.push(fileTemp);
+                imgBase64Id = fileTemp.id
                 //localStorage.setItem('imgTest', JSON.stringify(imgs)); 
             }
         };
@@ -91,19 +91,20 @@ function AddEditProduct() {
     }
 
     function onSubmit(data) {
-        //console.log('img64', imgBase64Id)
-        /* if(imgBase64){
-            data.urlImg = imgBase64
-        }*/
-
         //debugger
-        if (id) {
-            actionProducts.updateProduct(id, data)
-        } else {
-            actionProducts.addNewProduct(data)
-        }
+        console.log('file', file)
+        console.log('imgBase64Id',imgBase64Id)
 
-        history.navigate('/products')
+        if(file){
+            data.urlImg = covertImgeToBase64(file)
+        }
+        // if (id) {
+        //     actionProducts.updateProduct(id, data)
+        // } else {
+        //     actionProducts.addNewProduct(data)
+        // }
+
+        //history.navigate('/products')
     }
 
     return (
