@@ -18,8 +18,8 @@ function Alert() {
     if (!alert) return null;
 
     return (
-        <div className="container">
-            <div className="m-3">
+        <div >
+            <div>
                 <div className={`alert alert-dismissible ${alert.type}`}>
                     {alert.message}
                     <button type="button" className="btn-close" onClick={() => dispatch(alertActions.clear())}></button>

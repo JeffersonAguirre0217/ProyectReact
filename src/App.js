@@ -1,5 +1,4 @@
 import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
 import { history } from "./components/shared/helper/history.js";
 
 import Layout from "./layout/layout.js";

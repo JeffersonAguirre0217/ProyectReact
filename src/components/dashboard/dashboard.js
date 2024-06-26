@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import { faList, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 function Dashboard() {
-
+    
     const initInfo ={
-        title: 'Dashboard',
         infoCard:[
             {
                 name: 'Categories',
@@ -27,11 +26,11 @@ function Dashboard() {
     return (
         <div className='container'>
             <div className='grid grid-cols-12 py-3'>
-                <h2>{initInfo.title}</h2>
+                <h2>Dashboard</h2>
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4'>
-                {initInfo.infoCard.map(card =>
-                    <div className='rounded-md card'>
+                {initInfo.infoCard.map((card, index )=>
+                    <div key={index} className='rounded-md card'>
                         <div className='px-4 py-3'>
                             <div>
                                 <h5><FontAwesomeIcon icon={card.icon} className='iconClass' size='lg' />{ ' ' + card.name}</h5>

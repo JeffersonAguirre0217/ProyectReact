@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import { history } from '../shared/helper/history';
 import { storeApp } from '../../zustand/storeZustand';
 import { actionProducts } from '../../zustand/productZustand';
 
@@ -14,7 +13,6 @@ function AddEditProduct() {
     const { id } = useParams();
     const [title, setTitle] = useState();
     const [file, setFile] = useState(null);
-    const [base64, setBase64] = useState(null);
     const product = actionProducts.getById(id)
     const categories = storeApp(state => state.categories.list)
 
@@ -92,8 +90,6 @@ function AddEditProduct() {
         } else {
             actionProducts.addNewProduct(data)
         }
-
-        history.navigate('/products')
     }
 
     return (

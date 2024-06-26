@@ -14,17 +14,27 @@ const initialStateProducts = {
     loading: false
 }
 
+const initialAlert = {
+    message: null,
+    type: null,
+    error: null
+}
+
 const initialStateUsers = {
     list: []
 }
 
 const auth = null
 
+const showMenu = null
+
 const initialState ={
     categories :initialStateCategories,
     products: initialStateProducts,
     users: initialStateUsers,
-    auth: auth
+    alert: initialAlert,
+    auth: auth,
+    menu: showMenu
 }
 
 export  const initialiceSlice = () =>  initialState;

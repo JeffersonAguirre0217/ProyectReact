@@ -2,18 +2,12 @@ import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-//import { useDispatch } from 'react-redux';
 
-import { history } from '../../shared/helper/history';
-import { userActions } from '../../../redux/userSlice';
+
 import { actionUser } from '../../../zustand/userZustand';
-//import { alertActions } from '../../../redux/alertSlice';
-
-//import { Alert } from '../../shared/alert/alertLogin';
+import { Alert } from '../../shared/alert/alert';
 
 function Register(){
-
-    //const dispatch = useDispatch();
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
@@ -34,23 +28,9 @@ function Register(){
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
-    // async function onSubmit(data) {
-    //     //dispatch(alertActions.clear());
-    //     try {
-    //         await dispatch(userActions.register(data)).unwrap();
-
-    //         // redirect to login page and display success alert
-    //         history.navigate('/login');
-    //         dispatch(alertActions.success({ message: 'Registration successful', showAfterRedirect: true }));
-    //     } catch (error) {
-    //         dispatch(alertActions.error(error));
-    //     }
-    // } 
 
     function onSubmit(data) {
-        console.log(data)
-        actionUser.registerUser(data);
-        history.navigate('/login');
+        actionUser.registerUser(data)
     }
 
     return(
@@ -77,6 +57,7 @@ function Register(){
                         <input name="password" type="password" {...register('password')} className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
                         <div className="invalid-feedback">{errors.password?.message}</div>
                     </div>
+                    <Alert />
                     <button disabled={isSubmitting} className="btn btn-primary">
                         {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
                         Register

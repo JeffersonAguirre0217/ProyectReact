@@ -10,9 +10,10 @@ import { AddEdit } from '../components/categories/addEditTemplate.js';
 import { AddEditProduct } from '../components/products/addEditTemplateProduct.js';
 import { Nav } from './nav.jsx';
 import { ProductDetail } from '../components/products/productDetail .js';
+import { storeApp } from '../zustand/storeZustand.js';
 
 function Layout() {
-
+    const hiddenMenu = storeApp (state => state.menu)
     const initData = [
         {
             icon: faDashboard,
@@ -31,17 +32,12 @@ function Layout() {
         }
     ]
 
-    const styleLoyout = {
-
-    }
-
-
     return (
-        <div id='Layout' >
+        <div id='Layout'>
             <Nav></Nav>
-            <div className="grid grid-cols-1 sm:grid-cols-5  md:grid-cols-7">
-                <div className="">
-                    <ul className="App-header pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-5  md:grid-cols-5">
+                <div id='Sidebar' className={`bg-slate-900 p-0 ${hiddenMenu}`} >
+                    <ul className=" m-0 h-screen">
                         {initData.map((item, index) =>
                             <Link key={index} to={item.path}>
                                 <li className='App-link'>
@@ -50,10 +46,11 @@ function Layout() {
                                 </li>
                             </Link>
                         )}
+                        
                     </ul>
                 </div>
-                <div className="col-span-12 md:col-span-6">
-                    <div className="container">
+                <div className="col-span-12 md:col-span-4 ">
+                    <div className="container overflow-y: scroll">
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/products" element={<Products />} />

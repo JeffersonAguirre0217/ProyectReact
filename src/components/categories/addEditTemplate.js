@@ -4,16 +4,16 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import { history } from '../shared/helper/history';
-
 import  { actionCategories } from '../../zustand/categoryZustand';
+import  { Alert } from '../shared/alert/alert'
 
-export { AddEdit };
+
 
 function AddEdit() {
     const { id } = useParams();
     const [title, setTitle] = useState();
     const category = actionCategories.getById(id)
+
     const styleOptions={
         buttonAdd:'bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 w-40 py-2  rounded-full',
         buttonSave:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
@@ -24,9 +24,9 @@ function AddEdit() {
     // form validation rules 
     const validationSchema = Yup.object().shape({
         name: Yup.string()
-            .required('Category is required'),
+            .required('Category is required').min(4, 'Category name must be at least 4 characters'),
         description: Yup.string()
-            .required('Description is required'),
+            .required('Description is required').min(6, 'Description must be at least 6 characters'),
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -51,13 +51,12 @@ function AddEdit() {
         }else{
             actionCategories.addNewCategory(data)
         }
-
-        history.navigate('/categories')
     }
 
     return (
         <div className='mt-3'>
             <h2>{title}</h2>
+                <Alert />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
                         <div className="mb-3 col">
@@ -83,3 +82,5 @@ function AddEdit() {
         </div>
     );
 }
+
+export { AddEdit };

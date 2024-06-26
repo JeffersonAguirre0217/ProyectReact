@@ -1,14 +1,12 @@
 import { produce } from 'immer';
 import { storeApp } from './storeZustand';
 import { history } from '../components/shared/helper/history';
+import { actionAlert } from './alertZustand'
 
 const { setState, getState } = storeApp
 
 const _authenticate = ((data) => {
     
-    ///const user = getState().users.list.find(x => x.username === data.username && x.password === data.password);
-    
-    //if (!user) return error('Username or password is incorrect');
     data.token = 'fake-jwt-token'
     setState(
         produce(state => {
@@ -21,10 +19,17 @@ const _authenticate = ((data) => {
 
 const _login = (({username, password})=>{
     const users = getState().users.list
-    const validation = ()=>{
-        return ('Username or password is incorrect');
-    }
-    users.map((user) => user.username === username && user.password === password ? _authenticate({username, password}) :   validation  )
+    actionAlert.clear()
+    //debugger
+    users.map((user) => {
+        if(user.username === username && user.password === password){
+            return _authenticate({username, password}) 
+        }if((user.username === username && user.password !== password) || (user.username !== username && user.password === password) ){
+            return actionAlert.errorAlert('UserName or Password is incorrect')
+        } else{
+            return actionAlert.errorAlert("You don't have an account yet")
+        }
+    })
     
 })
 

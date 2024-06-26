@@ -11,9 +11,3 @@
 .card-btn:hover {
   color: rgb(32, 88, 178);
 }
-
-@media screen and (max-width: 600px) {
-    #cardProduct {
-      height: 300px;
-    }
-  }
