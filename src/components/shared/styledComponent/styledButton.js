@@ -60,7 +60,7 @@ focus:ring-yellow-300
 export const CancelButton = tw(LinkButton)`
 rounded-sm
 text-white
-py-1
+py-1.5
 px-2
 bg-red-400
 hover:bg-red-500 

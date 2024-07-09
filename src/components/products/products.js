@@ -5,7 +5,7 @@ import { actionProducts } from '../../zustand/productZustand';
 import { Alert } from '../shared/alert/alert'
 import { ContainerGeneral, ContainerSpace, ContainerTitle } from '../shared/styledComponent/styledContainer';
 import { LinkButton } from '../shared/styledComponent/styledButton';
-import { BodyCardProduct, CardContentImage, CardProducts, ContenSelectFilters, ContentAddButton, ContentButtonsProduct, ContentFilters, DeleteButtonProduct, ExtraInfoCardProduct, GridProducts, ImageProduct, MoreInfoButtonProduct, SearchProducts, UpdateButtonProduct } from './styledProduct';
+import { BodyCardProduct, CardContentImage, CardProducts, ContenSelectFilters, ContentAddButton, ContentButtonsProduct, ContentFilters, DeleteButtonProduct, ExtraInfoCardProduct, GridProducts, ImageProduct, MoreInfoButtonProduct, SearchProducts, SelectCategories, UpdateButtonProduct } from './styledProduct';
 import { useState, useEffect } from 'react';
 import { actionCategories } from '../../zustand/categoryZustand';
 
@@ -65,15 +65,14 @@ function Products() {
                                 placeholder="Search Category"
                                 onChange={(filterProduct)}
                             />
-                            <span className="sr-only">Search Category</span>
                         </label>
                         <ContenSelectFilters>
-                            <select className='selectroCategory' onChange={(filterProductByCategory)}>
-                            <option >All</option>
+                            <SelectCategories className='selectroCategory' onChange={(filterProductByCategory)}>
+                                <option >All</option>
                                 {categories.map((category, index) =>
                                     <option key={index} >{category.name}</option>
                                 )}
-                            </select>
+                            </SelectCategories>
                         </ContenSelectFilters>
                     </ContentFilters>
 
@@ -132,11 +131,6 @@ function Products() {
             {loading &&
                 <div className="text-center m-5">
                     <span className="spinner-border spinner-border-lg align-center"></span>
-                </div>
-            }
-            {products?.error &&
-                <div class="text-center m-5">
-                    <div class="text-danger">Error loading  {products.error}</div>
                 </div>
             }
         </ContainerGeneral>

@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 export const ContentLayout = tw.div`
 grid 
@@ -34,3 +34,28 @@ col-span-12
 md:col-span-4 
 px-3
 `
+
+// ----------------navbar----------------
+export const ContentNavbar = tw.nav`
+bg-slate-900 
+text-white
+h-20
+`
+
+export const Navbar = tw.div`
+flex
+pt-4
+space-x-6
+text-xl
+`
+
+export const MenuMovil = tw.button`
+sm:invisible
+sm:pl-4
+`
+
+export const ButtonDashboars= tw.button(NavLink)`
+no-underline
+text-white
+`
+

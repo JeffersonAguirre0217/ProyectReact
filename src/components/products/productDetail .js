@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { actionProducts } from '../../zustand/productZustand';
 import { set } from 'react-hook-form';
+import { ContainerGeneral, ContainerTitle } from '../shared/styledComponent/styledContainer';
+import { CardProductDetail, ContentCardButtonProductDetail, ContentCardImgProductDetail, ContentCardProductDetail, ContentCardTextProductDetail } from './styledProduct';
+import { CancelButton } from '../shared/styledComponent/styledButton';
 
 export { ProductDetail };
 
@@ -23,17 +26,17 @@ function ProductDetail() {
     }
 
     return (
-        <div className='container p-2'>
-            <h2>{title}</h2>
+        <ContainerGeneral>
+            <ContainerTitle>{title}</ContainerTitle>
             {product &&
-                <div className='container cardDetail rounded-lg'>
-                    <div className="grid  grid-cols-1 md:grid-cols-3 p-4">
-                        <div className='pr-4'>
+                <CardProductDetail>
+                    <ContentCardProductDetail>
+                        <ContentCardImgProductDetail>
                             {product.urlImg ? <img className='' src={`data:image/jpeg;base64,${product.urlImg}`} alt={product.name} /> : <img className='img-product' src="https://cdn.icon-icons.com/icons2/943/PNG/512/shoppaymentorderbuy-10_icon-icons.com_73874.png" alt="..." />}
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-2">
+                        </ContentCardImgProductDetail>
+                        <ContentCardTextProductDetail>
                             <div>
-                                <h5 className="form-h5">Product</h5>
+                                <h5>Product</h5>
                                 <p>{product.name}</p>
                             </div>
                             <div >
@@ -52,26 +55,18 @@ function ProductDetail() {
                                 <h5 className="">description</h5>
                                 <p>{product.categoryDescription}</p>
                             </div>
-                        </div>
-
-
-                    </div>
-                    <div>
-                        <Link to="/products" className="btn btn-danger m-2">Back</Link>
-
-                    </div>
-                </div>
+                        </ContentCardTextProductDetail>
+                    </ContentCardProductDetail>
+                    <ContentCardButtonProductDetail>
+                        <CancelButton to="/products">Back</CancelButton>
+                    </ContentCardButtonProductDetail>
+                </CardProductDetail>
             }
             {!product &&
                 <div className="text-center m-5">
                     <span className="spinner-border spinner-border-lg align-center"></span>
                 </div>
             }
-            {product?.error &&
-                <div class="text-center m-5">
-                    <div class="text-danger">Error loading user: {product.error}</div>
-                </div>
-            }
-        </div>
+        </ContainerGeneral>
     )
 }

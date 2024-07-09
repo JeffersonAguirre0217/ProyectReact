@@ -18,6 +18,22 @@ py-1
 w-full
 `
 
+export const SelectCategories = styled.select`
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+`
+
 export const ContentAddButton = tw.div`
 md:mt-2
 sm:w-full
@@ -63,11 +79,11 @@ h-40
 blur-none
 `
 
-export  const BodyCardProduct = tw.div`
+export const BodyCardProduct = tw.div`
 grid
 grid-cols-2
 `
-export  const ExtraInfoCardProduct = tw.div`
+export const ExtraInfoCardProduct = tw.div`
 grid
 grid-cols-2
 mb-3
@@ -125,4 +141,35 @@ file:focus:ring-violet-300
 file:text-white w-auto 
 file:py-2  
 file:rounded-md
+`
+
+//-------------------DETAIL PRODUCT -----------
+
+export const CardProductDetail = tw.div`
+bg-slate-50 
+rounded-lg
+shadow-3xl
+p-3
+`
+export const ContentCardProductDetail = tw.div`
+grid
+grid-cols-1
+md:grid-cols-3
+p-3
+`
+
+export const ContentCardImgProductDetail = tw.div`
+p-4
+`
+export const ContentCardTextProductDetail = tw.div`
+grid 
+grid-cols-1 
+md:grid-cols-2 
+md:col-span-2
+p-4
+`
+
+export const ContentCardButtonProductDetail = tw.div`
+px-6
+pb-3
 `

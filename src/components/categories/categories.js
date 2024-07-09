@@ -47,7 +47,6 @@ function Categories() {
                         placeholder="Search Category"
                         onChange={(filterCategoy)}
                     />
-                    <span className="sr-only">Search Category</span>
                 </label>
             </ContentFilter>
             <Alert />
@@ -79,12 +78,9 @@ function Categories() {
                                             <UpdateButton to={`edit/${category.id}`}>
                                                 <FontAwesomeIcon icon={faEdit} />
                                             </UpdateButton>
-                                            {<DeliteButton onClick={()=>actionCategories.deleteCaregory(category.id)}>
-                                                {category.isDeleting
-                                                    ? <span className="spinner-border spinner-border-sm"></span>
-                                                    : <FontAwesomeIcon icon={faDeleteLeft} className='m-0' />
-                                                }
-                                            </DeliteButton>}
+                                            <DeliteButton onClick={()=>actionCategories.deleteCaregory(category.id)}>
+                                                <FontAwesomeIcon icon={faDeleteLeft} />
+                                            </DeliteButton>
                                         </TableContentButtons>
                                     </TableContentCategory>
                                 </TableBodyCategory>
@@ -104,12 +100,6 @@ function Categories() {
                     <LinkButton to="add">
                         Add Category
                     </LinkButton>
-                </div>
-            }
-            {loading?.error &&
-                <div class="text-center m-5">
-                    <div class="text-danger">Error loading  {categories.error}</div>
-
                 </div>
             }
         </ContainerGeneral>

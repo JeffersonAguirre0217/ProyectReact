@@ -25,7 +25,6 @@ function AddEdit() {
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
 
-    //useForm() hook
     const { register, handleSubmit, reset, setValue, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
@@ -66,10 +65,7 @@ function AddEdit() {
                         </div>
                     </div>
                     <ContentButtonsAddUp>
-                        <SaveButton type="submit" disabled={isSubmitting}>
-                            {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
-                            Save
-                        </SaveButton>
+                        <SaveButton type="submit">Save</SaveButton>
                         <ResetButton onClick={() => reset()} type="button" disabled={isSubmitting}>Reset</ResetButton>
                         <CancelButton to="/categories">Cancel</CancelButton>
                     </ContentButtonsAddUp>
