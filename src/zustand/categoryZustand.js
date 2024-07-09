@@ -9,35 +9,61 @@ const { setState, getState } = storeApp
 const addCategory = ((newCategory) => {
     actionAlert.clear()
     const category = getState().categories.list
-    debugger
+
     if (_getByName(newCategory.name)) {
         actionAlert.errorAlert('Category name cannot be repeated')
     } else {
-        const id = category.length ? Math.max(...category.map(x => x.id)) + 1 : 1;
+        let id = null
+        if(category === null){
+            id = 1  
+        }else{
+            id = category.length ? Math.max(...category.map(x => x.id)) + 1 : 1;
+        }
         newCategory.id = id;
         setState(
             produce(state => {
-                state.categories.list = [...category, newCategory]
+                if(category === null){
+                    state.categories.list = [newCategory]
+                }else{
+                    state.categories.list = [...category, newCategory]
+                }
             }
             ))
         actionAlert.success('Category was created successfully')
         history.navigate('/categories')
     }
-
-
-
 })
+
+const _getAll = (async () => {
+    return getState(state => state.categories)
+}
+)
 
 const _getById = ((id) => {
     const categories = getState().categories.list
+
+    if (IsNullCategories()) return categories
     const category = categories.find(x => Number(x.id) === Number(id))
     return category
-
 })
 
 const _getByName = ((name) => {
     const categories = getState().categories.list
+    if (IsNullCategories()) return false
     const category = categories.find(x => x.name === name ? true : false)
+    return category
+
+})
+
+const _filterByName = (async (name) => {
+    const categories = getState().categories.list
+    const category = categories.filter(result => {
+        if (result.name.toLowerCase() === name.toLowerCase()) {
+            return result
+        } else if (name.length === 0) {
+            return categories
+        }
+    })
     return category
 
 })
@@ -61,7 +87,7 @@ const _updateCategory = ((id, data) => {
             produce(state => {
                 state.categories.list = newCategories
             }
-        ))
+            ))
         actionAlert.success('Category was updated successfully')
         history.navigate('/categories')
     }
@@ -73,15 +99,28 @@ const _deleteCategory = ((id) => {
     const category = categories.filter(x => x.id !== id);
     setState(
         produce(state => {
-            state.categories.list = category
+            if(categories.length === 1){
+                state.categories.list = null
+            }else{
+                state.categories.list = category
+            }
+            
         }
         ))
     actionAlert.success('Category was successfully deleted')
+    window.location.reload()
 })
+
+function IsNullCategories(){
+    const result = getState().categories.list
+    return result === null ? true : false
+}
 
 export const actionCategories = {
     addNewCategory: addCategory,
     updateCategory: _updateCategory,
     getById: _getById,
+    filterByCategory: _filterByName,
+    getAll: _getAll,
     deleteCaregory: _deleteCategory
 }

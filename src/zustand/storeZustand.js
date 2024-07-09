@@ -5,13 +5,13 @@ import { persist, devtools } from 'zustand/middleware';
 // init data
 
 const initialStateCategories = {
-    list: [],
-    loading: false
+    list: null,
+    loading: null
 }
 
 const initialStateProducts = {
-    list: [],
-    loading: false
+    list: null,
+    loading: null
 }
 
 const initialAlert = {

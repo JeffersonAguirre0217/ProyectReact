@@ -1,32 +1,57 @@
 import './categories.css';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faDeleteLeft, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faDeleteLeft, faEye, faL } from '@fortawesome/free-solid-svg-icons';
 
 import { storeApp } from '../../zustand/storeZustand';
 import { actionCategories } from '../../zustand/categoryZustand';
-import  { Alert } from '../shared/alert/alert'
+import { Alert } from '../shared/alert/alert'
 import { LinkButton, DeliteButton, InfoButton, UpdateButton } from '../shared/styledComponent/styledButton';
 import { ContainerGeneral, ContainerSpace, ContainerTitle } from '../shared/styledComponent/styledContainer';
-import { TableBodyCategory, TableCategories, TableContentButtons, TableContentCategory, TableHeardCategory } from './styledCategories';
+import { ContentFilter, SearchCategory, TableBodyCategory, TableCategories, TableContentButtons, TableContentCategory, TableHeardCategory } from './styledCategories';
+import { get } from 'react-hook-form';
 
 function Categories() {
-
-    const categories = storeApp(state => state.categories.list);
-
-    const loading = false///storeCategories(state => state.loading)
+    const [loading, setIsLoading] = useState(true)
+    //let categories = null
+    
+    const [categories, setCategories] = useState(null);
+    const [resultSearch, setResultSearch] = useState("ALL");
+    const [searchParam] = useState(["name"]);
 
     useEffect(() => {
-
+        getAllCategories()
     }, []);
+
+    async function getAllCategories(){
+        const items = await actionCategories.getAll()
+        setCategories(items.categories.list)
+        setIsLoading(items.categories.loading)
+    }
+
+    async function filterCategoy(e) {
+        setIsLoading(true)
+        let search = await actionCategories.filterByCategory(e.target.value)
+        setCategories(search)
+        setIsLoading(false)
+    }
 
     return (
         <ContainerGeneral>
-            <ContainerTitle>Categories</ContainerTitle>
+            <ContentFilter>
+                <ContainerTitle>Categories</ContainerTitle>
+                <label htmlFor="search-form">
+                    <SearchCategory
+                        type="search"
+                        placeholder="Search Category"
+                        onChange={(filterCategoy)}
+                    />
+                    <span className="sr-only">Search Category</span>
+                </label>
+            </ContentFilter>
             <Alert />
-            {categories.length >0 &&
+            {categories &&
                 <div>
                     <LinkButton to="add">Add Category</LinkButton>
                     <ContainerSpace />
@@ -48,18 +73,18 @@ function Categories() {
                                     <TableContentCategory></TableContentCategory>
                                     <TableContentCategory>
                                         <TableContentButtons >
-                                        <InfoButton to={`edit/${category.id}`}>
-                                            <FontAwesomeIcon icon={faEye} />
-                                        </InfoButton>
-                                        <UpdateButton to={`edit/${category.id}`}>
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </UpdateButton>
-                                        {<DeliteButton onClick={() => actionCategories.deleteCaregory(category.id)}>
-                                            {category.isDeleting
-                                                ? <span className="spinner-border spinner-border-sm"></span>
-                                                : <FontAwesomeIcon icon={faDeleteLeft} className='m-0' />
-                                            }
-                                        </DeliteButton>}
+                                            <InfoButton to={`edit/${category.id}`}>
+                                                <FontAwesomeIcon icon={faEye} />
+                                            </InfoButton>
+                                            <UpdateButton to={`edit/${category.id}`}>
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </UpdateButton>
+                                            {<DeliteButton onClick={()=>actionCategories.deleteCaregory(category.id)}>
+                                                {category.isDeleting
+                                                    ? <span className="spinner-border spinner-border-sm"></span>
+                                                    : <FontAwesomeIcon icon={faDeleteLeft} className='m-0' />
+                                                }
+                                            </DeliteButton>}
                                         </TableContentButtons>
                                     </TableContentCategory>
                                 </TableBodyCategory>
@@ -73,7 +98,7 @@ function Categories() {
                     <span className="spinner-border spinner-border-lg align-center"></span>
                 </div>
             }
-            {categories.length === 0 &&
+            {!categories &&
                 <div className="text-center m-5">
                     <h4>You don't have any categories created yet</h4>
                     <LinkButton to="add">

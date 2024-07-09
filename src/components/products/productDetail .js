@@ -1,24 +1,31 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { actionProducts } from '../../zustand/productZustand';
+import { set } from 'react-hook-form';
 
 export { ProductDetail };
 
 function ProductDetail() {
     const { id } = useParams();
     const [title, setTitle] = useState();
-    const product = actionProducts.getById(id)
+    const [product, setProduct ] =useState(null)
 
 
     useEffect(() => {
-        setTitle('Detail of ' + product.name);
+        getProductDetailById(id)
+        
     }, []);
 
+    async function getProductDetailById(id){
+        const result = await actionProducts.getById(id)
+        setProduct(result)
+        setTitle('Detail of ' + result.name);
+    }
 
     return (
         <div className='container p-2'>
             <h2>{title}</h2>
-            {!(product?.loading || product?.error) &&
+            {product &&
                 <div className='container cardDetail rounded-lg'>
                     <div className="grid  grid-cols-1 md:grid-cols-3 p-4">
                         <div className='pr-4'>
@@ -55,7 +62,7 @@ function ProductDetail() {
                     </div>
                 </div>
             }
-            {product?.loading &&
+            {!product &&
                 <div className="text-center m-5">
                     <span className="spinner-border spinner-border-lg align-center"></span>
                 </div>

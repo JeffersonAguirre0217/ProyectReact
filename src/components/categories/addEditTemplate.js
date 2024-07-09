@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 
 import  { actionCategories } from '../../zustand/categoryZustand';
 import  { Alert } from '../shared/alert/alert'
+import { CancelButton, ResetButton, SaveButton } from '../shared/styledComponent/styledButton';
+import { ContentButtonsAddUp } from '../products/styledProduct';
 
 
 
@@ -13,13 +15,6 @@ function AddEdit() {
     const { id } = useParams();
     const [title, setTitle] = useState();
     const category = actionCategories.getById(id)
-
-    const styleOptions={
-        buttonAdd:'bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 w-40 py-2  rounded-full',
-        buttonSave:'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 py-2 px-3 m-1  rounded-md',
-        buttonReset:'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring focus:ring-yellow-300 py-2 px-3 m-0  rounded-md',
-        buttonBack:'bg-red-500 hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 py-2 px-3 m-1  rounded-md',
-    }
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
@@ -70,14 +65,14 @@ function AddEdit() {
                             <div className="invalid-feedback">{errors.description?.message}</div>
                         </div>
                     </div>
-                    <div className="mb-3">
-                        <button type="submit" disabled={isSubmitting} className={styleOptions.buttonSave}>
+                    <ContentButtonsAddUp>
+                        <SaveButton type="submit" disabled={isSubmitting}>
                             {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
                             Save
-                        </button>
-                        <button onClick={() => reset()} type="button" disabled={isSubmitting} className={styleOptions.buttonReset}>Reset</button>
-                        <Link to="/categories"><button className={styleOptions.buttonBack}>Cancel</button></Link>
-                    </div>
+                        </SaveButton>
+                        <ResetButton onClick={() => reset()} type="button" disabled={isSubmitting}>Reset</ResetButton>
+                        <CancelButton to="/categories">Cancel</CancelButton>
+                    </ContentButtonsAddUp>
                 </form>            
         </div>
     );
