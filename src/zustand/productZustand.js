@@ -66,14 +66,13 @@ const _filterByName = (async (name) => {
     return product
 })
 
-const _filterByCategory = (async (category) => {
+const _filterByCategory = (async (id) => {
+    console.log(id)
     const products = getState().products.list
-    if(category === 'All') return products
+    if(id === 'All') return products
     const product = products.filter(result => {
-        if (result.category.toLowerCase() === category.toLowerCase()) {
+        if (Number(result.categoryId) === Number(id)) {
             return result
-        } else if (category.length === 0) {
-            return products
         }
     })
     return product

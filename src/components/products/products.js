@@ -22,6 +22,7 @@ function Products() {
 
     async function getAllProducts() {
         const items = await actionProducts.getAll()
+        console.log(items.products)
         setProducts(items.products.list)
         setIsLoading(items.products.loading)
     }
@@ -70,7 +71,7 @@ function Products() {
                             <SelectCategories className='selectroCategory' onChange={(filterProductByCategory)}>
                                 <option >All</option>
                                 {categories.map((category, index) =>
-                                    <option key={index} >{category.name}</option>
+                                    <option key={index} value={category.id} >{category.name}</option>
                                 )}
                             </SelectCategories>
                         </ContenSelectFilters>

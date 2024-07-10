@@ -41,11 +41,12 @@ function AddEditProduct() {
         
         const item = await actionProducts.getById(id)
         setProduct(item)
+            setValue('name', item.urlImg,)
             setValue('name', item.name,)
             setValue('cant', item.cant)
             setValue('price', item.price)
-            setValue('categoryDescription', item.categoryDescription)
-            setValue('category', item.category)
+            setValue('description', item.description)
+            setValue('categoryId', item.categoryId)
             setIsLoading(false)
     }
 
@@ -59,9 +60,9 @@ function AddEditProduct() {
             .required('Cant is required').max(5, 'Cant only can to have 4 characters'),
         price: Yup.string()
             .required('Price is required').max(5, 'Cant only can to have 4 characters'),
-        category: Yup.string()
+        categoryId: Yup.string()
             .required('Category is required'),
-        categoryDescription: Yup.string()
+        description: Yup.string()
             .required('Description is required'),
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
@@ -98,11 +99,13 @@ function AddEditProduct() {
     }
 
     async function onSubmit(data) {
-
+        debugger
         if (file) {
             data.urlImg = await convertToBase64(file)
-        }else{
+        }else if(!file && product === null){
             data.urlImg = null
+        }else{
+            data.urlImg = product.urlImg
         }
 
         if (id) {
@@ -140,21 +143,20 @@ function AddEditProduct() {
                     </div>
                     <div className="mb-3 col-4">
                         <label className="form-label">Category</label><br></br>
-                        <select {...register("category")} className='selectroCategory'>
-                            {categories.map(category =>
-                                <option key={category.id}>{category.name}</option>
+                        <select {...register("categoryId")} className='selectroCategory'>
+                            {categories.map((category, index) =>
+                                <option key={index} value={category.id}>{category.name}</option>
                             )}
                         </select>
                     </div>
                     <div className="mb-3 col-12">
-                        <label className="form-label">description</label>
-                        <input name="lastName" type="text" {...register('categoryDescription')} className={`form-control ${errors.price ? 'is-invalid' : ''}`} />
-                        <div className="invalid-feedback">{errors.categoryDescription?.message}</div>
+                        <label className="form-label">Description</label>
+                        <input name="lastName" type="text" {...register('description')} className={`form-control ${errors.price ? 'is-invalid' : ''}`} />
+                        <div className="invalid-feedback">{errors.description?.message}</div>
                     </div>
                 </div>
                 <ContentButtonsAddUp>
                     <SaveButton type="submit" disabled={isSubmitting}>
-                        {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
                         Save
                     </SaveButton>
                     <ResetButton onClick={() => reset()} disabled={isSubmitting}>Reset</ResetButton>
